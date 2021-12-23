@@ -2,7 +2,8 @@ from urllib3.util import parse_url
 
 import grequests
 
-from fastapi.responses import PlainTextResponse, FastAPI
+from fastapi import FastAPI
+from fastapi.responses import PlainTextResponse
 
 _MINER_HOST = "a53d8b9e8f9604e088da646d930fcb8d-956876586.us-east-2.elb.amazonaws.com"
 
