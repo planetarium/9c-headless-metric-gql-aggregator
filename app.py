@@ -37,6 +37,8 @@ _NODE_LIST = [
     "a37a4ef26ef2f41bdb6939d68681f5e8-1379894347.us-east-2.elb.amazonaws.com",
     "ab9ae0958ce02433e9151e58da984a20-2032716986.us-east-2.elb.amazonaws.com",
     "a188856db6b6945199a1b9b308e941a1-1648614630.us-east-2.elb.amazonaws.com",
+    "af10d6e38dfd84a56b97cc96a91b60f9-1578209080.us-east-2.elb.amazonaws.com",
+    "a14fcbdeb22cf498c9582c080844ebb9-814692916.us-east-2.elb.amazonaws.com"
 ]
 
 _GET_TIP_GRAPHQL_QUERY = """
