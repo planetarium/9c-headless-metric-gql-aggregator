@@ -89,21 +89,22 @@ def aggregate_metrics():
     )
 
     metrics = ""
-    for response in responses:
+    for index, response in enumerate(responses):
         try:
             if response.status_code != 200:
                 continue
 
+            name = f"remote-headless-{index}"
             host = parse_url(response.url).host
             data = response.json()["data"]
             metric: str
 
             if "nodeStatus" in data:
                 tip_index = data["nodeStatus"]["tip"]["index"]
-                metric = f'ninechronicles_tip_index{{host="{host}"}} {tip_index}'
+                metric = f'ninechronicles_tip_index{{host="{host}",name="{name}"}} {tip_index}'
             elif "rpcInformation" in data:
                 rpc_clients_count = data["rpcInformation"]["totalCount"]
-                metric = f'ninechronicles_rpc_clients_count{{host="{host}"}} {rpc_clients_count}'
+                metric = f'ninechronicles_rpc_clients_count{{host="{host}",name="{name}"}} {rpc_clients_count}'
 
             metrics += metric
             metrics += "\n"
