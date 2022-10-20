@@ -5,7 +5,7 @@ import grequests
 from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
 
-_MINER_HOST = "9c-main-miner-2.nine-chronicles.com"
+_MINER_HOST = "9c-miner.planetarium.dev"
 
 _NODE_LIST = [
     "9c-main-rpc-1.nine-chronicles.com",
