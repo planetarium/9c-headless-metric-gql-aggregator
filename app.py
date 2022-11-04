@@ -58,7 +58,16 @@ _NODE_LIST = [
     "9c-main-rpc-48.nine-chronicles.com",
     "9c-main-rpc-49.nine-chronicles.com",
     "9c-main-rpc-50.nine-chronicles.com",
-    "9c-main-rpc-99.nine-chronicles.com"
+    "9c-main-rpc-99.nine-chronicles.com",
+    "tky-nc-1.ninodes.com",
+    "sgp-nc-1.ninodes.com",
+    "nj-nc-1.ninodes.com",
+    "la-nc-1.ninodes.com",
+    "fra-nc-1.ninodes.com",
+    "rpc-for-snapshot.nine-chronicles.com",
+    "9c-main-full-state.planetarium.dev",
+    "9c-main-miner-2.nine-chronicles.com",
+    "9c-main-miner-3.nine-chronicles.com"
 ]
 
 _GET_TIP_GRAPHQL_QUERY = """
