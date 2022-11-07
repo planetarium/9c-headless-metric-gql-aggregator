@@ -89,6 +89,14 @@ query {
 }
 """
 
+_STAGED_TXIDS_GRAPHQL_QUERY = """
+query {
+    nodeStatus {
+        stagedTxIds
+    }
+}
+"""
+
 app = FastAPI()
 
 
@@ -107,6 +115,8 @@ def make_get_tip_request(host: str) -> grequests.AsyncRequest:
 def make_get_rpc_clients_count_request(host: str) -> grequests.AsyncRequest:
     return make_query_request(host, _RPC_CLIENTS_COUNT_GRAPHQL_QUERY)
 
+def make_get_staged_txids_request(host: str) -> grequests.AsyncRequest:
+    return make_query_request(host, _STAGED_TXIDS_GRAPHQL_QUERY)
 
 @app.get("/metrics")
 def aggregate_metrics():
@@ -114,6 +124,7 @@ def aggregate_metrics():
         (
             *map(make_get_tip_request, (_MINER_HOST, *_NODE_LIST)),
             *map(make_get_rpc_clients_count_request, _NODE_LIST),
+            *map(make_get_staged_txids_request, _NODE_LIST),
         )
     )
 
@@ -129,8 +140,13 @@ def aggregate_metrics():
             metric: str
 
             if "nodeStatus" in data:
-                tip_index = data["nodeStatus"]["tip"]["index"]
-                metric = f'ninechronicles_tip_index{{host="{host}",name="{name}"}} {tip_index}'
+                node_status = data["nodeStatus"]
+                if "tip" in node_status:
+                    tip_index = node_status["tip"]["index"]
+                    metric = f'ninechronicles_tip_index{{host="{host}",name="{name}"}} {tip_index}'
+                elif "stagedTxIds" in node_status:
+                    staged_txids = node_status["stagedTxIds"]
+                    metric = f'ninechronicles_staged_txids_count{{host="{host}",name="{name}"}} {len(staged_txids)}'
             elif "rpcInformation" in data:
                 rpc_clients_count = data["rpcInformation"]["totalCount"]
                 metric = f'ninechronicles_rpc_clients_count{{host="{host}",name="{name}"}} {rpc_clients_count}'
