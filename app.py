@@ -13,8 +13,6 @@ _NODE_LIST = [
     "9c-main-rpc-3.nine-chronicles.com",
     "9c-main-rpc-4.nine-chronicles.com",
     "9c-main-rpc-5.nine-chronicles.com",
-    "9c-main-rpc-6.nine-chronicles.com",
-    "9c-main-rpc-7.nine-chronicles.com",
     "9c-main-rpc-8.nine-chronicles.com",
     "9c-main-rpc-9.nine-chronicles.com",
     "9c-main-rpc-10.nine-chronicles.com",
