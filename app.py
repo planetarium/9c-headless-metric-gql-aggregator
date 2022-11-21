@@ -103,6 +103,7 @@ def make_query_request(host: str, query: str) -> grequests.AsyncRequest:
         f"http://{host}/graphql",
         json={"query": query},
         headers={"Content-Type": "application/json"},
+        timeout=30,
     )
 
 
