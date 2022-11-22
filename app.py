@@ -90,7 +90,7 @@ query {
 _STAGED_TXIDS_GRAPHQL_QUERY = """
 query {
     nodeStatus {
-        stagedTxIds
+        stagedTxIdsCount
     }
 }
 """
@@ -98,7 +98,7 @@ query {
 _SUBSCRIBER_ADDRESSES_GRAPHQL_QUERY = """
 query {
     nodeStatus {
-        subscriberAddresses
+        subscriberAddressesCount
     }
 }
 """
@@ -157,12 +157,12 @@ def aggregate_metrics():
                 if "tip" in node_status:
                     tip_index = node_status["tip"]["index"]
                     metric = f'ninechronicles_tip_index{{host="{host}",name="{name}"}} {tip_index}'
-                elif "stagedTxIds" in node_status:
-                    staged_txids = node_status["stagedTxIds"]
-                    metric = f'ninechronicles_staged_txids_count{{host="{host}",name="{name}"}} {len(staged_txids)}'
-                elif "subscriberAddresses" in node_status:
-                    subscriber_addresses = node_status["subscriberAddresses"]
-                    metric = f'ninechronicles_subscriber_addresses_count{{host="{host}",name="{name}"}} {len(subscriber_addresses)}'
+                elif "stagedTxIdsCount" in node_status:
+                    staged_txids_count = node_status["stagedTxIdsCount"]
+                    metric = f'ninechronicles_staged_txids_count{{host="{host}",name="{name}"}} {staged_txids_count}'
+                elif "subscriberAddressesCount" in node_status:
+                    subscriber_addresses_count = node_status["subscriberAddressesCount"]
+                    metric = f'ninechronicles_subscriber_addresses_count{{host="{host}",name="{name}"}} {subscriber_addresses_count}'
             elif "rpcInformation" in data:
                 rpc_clients_count = data["rpcInformation"]["totalCount"]
                 metric = f'ninechronicles_rpc_clients_count{{host="{host}",name="{name}"}} {rpc_clients_count}'
