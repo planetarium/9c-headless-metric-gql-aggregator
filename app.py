@@ -147,8 +147,8 @@ def aggregate_metrics():
             if response.status_code != 200:
                 continue
 
-            name = host
             host = parse_url(response.url).host
+            name = host
             data = response.json()["data"]
             metric: str
 
