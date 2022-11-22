@@ -147,7 +147,7 @@ def aggregate_metrics():
             if response.status_code != 200:
                 continue
 
-            name = f"remote-headless-{index}"
+            name = host
             host = parse_url(response.url).host
             data = response.json()["data"]
             metric: str
