@@ -142,7 +142,7 @@ def aggregate_metrics():
     )
 
     metrics = ""
-    for index, response in enumerate(responses):
+    for response in responses:
         try:
             if response.status_code != 200:
                 continue
