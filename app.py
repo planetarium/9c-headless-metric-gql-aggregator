@@ -60,7 +60,7 @@ _NODE_LIST = [
     "tky-nc-1.ninodes.com",
     "sgp-nc-1.ninodes.com",
     "nj-nc-1.ninodes.com",
-#    "la-nc-1.ninodes.com",
+    "la-nc-1.ninodes.com",
     "fra-nc-1.ninodes.com",
     "rpc-for-snapshot.nine-chronicles.com",
     "9c-main-full-state.planetarium.dev",
@@ -132,12 +132,16 @@ def make_get_subscribe_addresses_request(host: str) -> grequests.AsyncRequest:
 
 @app.get("/metrics")
 def aggregate_metrics():
+    BANNED_HOSTS = [
+        "la-nc-1.ninodes.com",
+    ]
+
     responses = grequests.map(
         (
             *map(make_get_tip_request, (_MINER_HOST, *_NODE_LIST)),
             *map(make_get_rpc_clients_count_request, _NODE_LIST),
-            *map(make_get_staged_txids_request, _NODE_LIST),
-            *map(make_get_subscribe_addresses_request, _NODE_LIST),
+            *map(make_get_staged_txids_request, filter(lambda x: x not in BANNED_HOSTS, _NODE_LIST)),
+            *map(make_get_subscribe_addresses_request, filter(lambda x: x not in BANNED_HOSTS, _NODE_LIST)),
         )
     )
 
