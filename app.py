@@ -60,7 +60,7 @@ _NODE_LIST = [
     "tky-nc-1.ninodes.com",
     "sgp-nc-1.ninodes.com",
     "nj-nc-1.ninodes.com",
-    "la-nc-1.ninodes.com",
+#    "la-nc-1.ninodes.com",
     "fra-nc-1.ninodes.com",
     "rpc-for-snapshot.nine-chronicles.com",
     "9c-main-full-state.planetarium.dev",
