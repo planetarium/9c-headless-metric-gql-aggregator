@@ -1,3 +1,4 @@
+from typing import Optional
 from urllib3.util import parse_url
 
 import grequests
@@ -154,25 +155,30 @@ def aggregate_metrics():
             host = parse_url(response.url).host
             name = host
             data = response.json()["data"]
-            metric: str
+            metric: Optional[str] = None
 
             if "nodeStatus" in data:
                 node_status = data["nodeStatus"]
                 if "tip" in node_status:
                     tip_index = node_status["tip"]["index"]
-                    metric = f'ninechronicles_tip_index{{host="{host}",name="{name}"}} {tip_index}'
+                    if tip_index is not None:
+                        metric = f'ninechronicles_tip_index{{host="{host}",name="{name}"}} {tip_index}'
                 elif "stagedTxIdsCount" in node_status:
                     staged_txids_count = node_status["stagedTxIdsCount"]
-                    metric = f'ninechronicles_staged_txids_count{{host="{host}",name="{name}"}} {staged_txids_count}'
+                    if staged_txids_count is not None:
+                        metric = f'ninechronicles_staged_txids_count{{host="{host}",name="{name}"}} {staged_txids_count}'
                 elif "subscriberAddressesCount" in node_status:
                     subscriber_addresses_count = node_status["subscriberAddressesCount"]
-                    metric = f'ninechronicles_subscriber_addresses_count{{host="{host}",name="{name}"}} {subscriber_addresses_count}'
+                    if subscriber_addresses_count is not None:
+                        metric = f'ninechronicles_subscriber_addresses_count{{host="{host}",name="{name}"}} {subscriber_addresses_count}'
             elif "rpcInformation" in data:
                 rpc_clients_count = data["rpcInformation"]["totalCount"]
-                metric = f'ninechronicles_rpc_clients_count{{host="{host}",name="{name}"}} {rpc_clients_count}'
+                if rpc_clients_count is not None:
+                    metric = f'ninechronicles_rpc_clients_count{{host="{host}",name="{name}"}} {rpc_clients_count}'
 
-            metrics += metric
-            metrics += "\n"
+            if metric is not None:
+                metrics += metric
+                metrics += "\n"
         except:
             pass
 
