@@ -134,7 +134,6 @@ def make_get_subscribe_addresses_request(host: str) -> grequests.AsyncRequest:
 @app.get("/metrics")
 def aggregate_metrics():
     BANNED_HOSTS = [
-        "la-nc-1.ninodes.com",
     ]
 
     responses = grequests.map(
