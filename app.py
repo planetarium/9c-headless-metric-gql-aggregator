@@ -66,7 +66,10 @@ _NODE_LIST = [
     "rpc-for-snapshot.nine-chronicles.com",
     "9c-main-full-state.planetarium.dev",
     "9c-main-miner-2.nine-chronicles.com",
-    "9c-main-miner-3.nine-chronicles.com"
+    "9c-main-miner-3.nine-chronicles.com",
+    "9c-internal-rpc-1.nine-chronicles.com",
+    "a778316ca16af4065a02dc2753c1a0fc-1775306312.us-east-2.elb.amazonaws.com",
+    "ae177a0efd48c42c68ef1908fcdb0954-1722243693.us-east-2.elb.amazonaws.com:31235"
 ]
 
 _GET_TIP_GRAPHQL_QUERY = """
