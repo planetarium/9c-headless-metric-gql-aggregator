@@ -112,7 +112,7 @@ app = FastAPI()
 
 def make_query_request(host: str, query: str) -> grequests.AsyncRequest:
     return grequests.post(
-        f"http://{host}/graphql",
+        f"https://{host}/graphql",
         json={"query": query},
         headers={"Content-Type": "application/json"},
         timeout=30,
