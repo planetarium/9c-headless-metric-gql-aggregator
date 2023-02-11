@@ -77,13 +77,13 @@ def make_query_request(host: str, query: str) -> grequests.AsyncRequest:
                 f"http://{host}/graphql_headless",
                 json={"query": query},
                 headers={"Content-Type": "application/json"},
-                timeout=30,
+                timeout=10,
             )
         return grequests.post(
             f"http://{host}/graphql",
             json={"query": query},
             headers={"Content-Type": "application/json"},
-            timeout=30,
+            timeout=10,
         )
     except:
         pass
@@ -96,6 +96,7 @@ def make_get_tip_request(host: str) -> grequests.AsyncRequest:
 def make_get_rpc_clients_count_request(host: str) -> grequests.AsyncRequest:
     return make_query_request(host, _RPC_CLIENTS_COUNT_GRAPHQL_QUERY)
 
+
 def make_get_staged_txids_request(host: str) -> grequests.AsyncRequest:
     return make_query_request(host, _STAGED_TXIDS_GRAPHQL_QUERY)
 
@@ -103,8 +104,10 @@ def make_get_staged_txids_request(host: str) -> grequests.AsyncRequest:
 def make_get_subscribe_addresses_request(host: str) -> grequests.AsyncRequest:
     return make_query_request(host, _SUBSCRIBER_ADDRESSES_GRAPHQL_QUERY)
 
+
 def exception_handler(request, exception):
     print(exception)
+
 
 @app.get("/metrics")
 def aggregate_metrics():
