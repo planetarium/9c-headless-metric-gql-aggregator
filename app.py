@@ -14,59 +14,19 @@ _NODE_LIST = [
     "9c-main-rpc-3.nine-chronicles.com",
     "9c-main-rpc-4.nine-chronicles.com",
     "9c-main-rpc-5.nine-chronicles.com",
-    "9c-main-rpc-8.nine-chronicles.com",
-    "9c-main-rpc-9.nine-chronicles.com",
-    "9c-main-rpc-10.nine-chronicles.com",
-    "9c-main-rpc-11.nine-chronicles.com",
-    "9c-main-rpc-12.nine-chronicles.com",
-    "9c-main-rpc-13.nine-chronicles.com",
-    "9c-main-rpc-14.nine-chronicles.com",
-    "9c-main-rpc-15.nine-chronicles.com",
-    "9c-main-rpc-16.nine-chronicles.com",
-    "9c-main-rpc-17.nine-chronicles.com",
-    "9c-main-rpc-18.nine-chronicles.com",
-    "9c-main-rpc-19.nine-chronicles.com",
-    "9c-main-rpc-20.nine-chronicles.com",
-    "9c-main-rpc-21.nine-chronicles.com",
-    "9c-main-rpc-22.nine-chronicles.com",
-    "9c-main-rpc-23.nine-chronicles.com",
-    "9c-main-rpc-24.nine-chronicles.com",
-    "9c-main-rpc-25.nine-chronicles.com",
-    "9c-main-rpc-26.nine-chronicles.com",
-    "9c-main-rpc-27.nine-chronicles.com",
-    "9c-main-rpc-28.nine-chronicles.com",
-    "9c-main-rpc-29.nine-chronicles.com",
-    "9c-main-rpc-30.nine-chronicles.com",
     "9c-main-rpc-31.nine-chronicles.com",
-    "9c-main-rpc-32.nine-chronicles.com",
-    "9c-main-rpc-33.nine-chronicles.com",
-    "9c-main-rpc-34.nine-chronicles.com",
-    "9c-main-rpc-35.nine-chronicles.com",
-    "9c-main-rpc-36.nine-chronicles.com",
-    "9c-main-rpc-37.nine-chronicles.com",
-    "9c-main-rpc-38.nine-chronicles.com",
-    "9c-main-rpc-39.nine-chronicles.com",
-    "9c-main-rpc-40.nine-chronicles.com",
-    "9c-main-rpc-41.nine-chronicles.com",
-    "9c-main-rpc-42.nine-chronicles.com",
-    "9c-main-rpc-43.nine-chronicles.com",
-    "9c-main-rpc-44.nine-chronicles.com",
-    "9c-main-rpc-45.nine-chronicles.com",
-    "9c-main-rpc-46.nine-chronicles.com",
-    "9c-main-rpc-47.nine-chronicles.com",
-    "9c-main-rpc-48.nine-chronicles.com",
-    "9c-main-rpc-49.nine-chronicles.com",
-    "9c-main-rpc-50.nine-chronicles.com",
-    "9c-main-rpc-99.nine-chronicles.com",
     "tky-nc-1.ninodes.com",
     "sgp-nc-1.ninodes.com",
     "nj-nc-1.ninodes.com",
     "la-nc-1.ninodes.com",
     "fra-nc-1.ninodes.com",
-    "rpc-for-snapshot.nine-chronicles.com",
     "9c-main-full-state.planetarium.dev",
     "9c-main-miner-2.nine-chronicles.com",
     "9c-main-miner-3.nine-chronicles.com",
+    "api.9c.gg",
+    "9c-main-data-provider-db.nine-chronicles.com",
+    "a5bba99adb503495baa274a7e06a91bb-225412308.us-east-2.elb.amazonaws.com:23061",
+    "a0da6ab2a59a546e6b632a6cb9c0a577-498991761.us-east-2.elb.amazonaws.com:23061",
     "9c-internal-rpc-1.nine-chronicles.com",
     "a778316ca16af4065a02dc2753c1a0fc-1775306312.us-east-2.elb.amazonaws.com",
     "ae177a0efd48c42c68ef1908fcdb0954-1722243693.us-east-2.elb.amazonaws.com:31235"
@@ -111,12 +71,22 @@ app = FastAPI()
 
 
 def make_query_request(host: str, query: str) -> grequests.AsyncRequest:
-    return grequests.post(
-        f"http://{host}/graphql",
-        json={"query": query},
-        headers={"Content-Type": "application/json"},
-        timeout=30,
-    )
+    try:
+        if host == "api.9c.gg" or host == "9c-main-data-provider-db.nine-chronicles.com":
+            return grequests.post(
+                f"http://{host}/graphql_headless",
+                json={"query": query},
+                headers={"Content-Type": "application/json"},
+                timeout=30,
+            )
+        return grequests.post(
+            f"http://{host}/graphql",
+            json={"query": query},
+            headers={"Content-Type": "application/json"},
+            timeout=30,
+        )
+    except:
+        pass
 
 
 def make_get_tip_request(host: str) -> grequests.AsyncRequest:
@@ -133,6 +103,8 @@ def make_get_staged_txids_request(host: str) -> grequests.AsyncRequest:
 def make_get_subscribe_addresses_request(host: str) -> grequests.AsyncRequest:
     return make_query_request(host, _SUBSCRIBER_ADDRESSES_GRAPHQL_QUERY)
 
+def exception_handler(request, exception):
+    print(exception)
 
 @app.get("/metrics")
 def aggregate_metrics():
@@ -145,7 +117,7 @@ def aggregate_metrics():
             *map(make_get_rpc_clients_count_request, _NODE_LIST),
             *map(make_get_staged_txids_request, filter(lambda x: x not in BANNED_HOSTS, _NODE_LIST)),
             *map(make_get_subscribe_addresses_request, filter(lambda x: x not in BANNED_HOSTS, _NODE_LIST)),
-        )
+        ), exception_handler=exception_handler
     )
 
     metrics = ""
