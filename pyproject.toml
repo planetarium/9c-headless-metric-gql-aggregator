@@ -11,6 +11,7 @@ fastapi = "^0.70.0"
 requests = "^2.26.0"
 grequests = "^0.6.0"
 uvicorn = "^0.16.0"
+python-dateutil = "^2.8.2"
 
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"

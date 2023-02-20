@@ -1,5 +1,6 @@
 from typing import Optional
 from urllib3.util import parse_url
+from dateutil.parser import parse
 
 import grequests
 
@@ -67,6 +68,21 @@ query {
 }
 """
 
+_BLOCK_INTERVAL_GRAPHQL_QUERY = """
+query{
+  chainQuery{
+    blockQuery{
+      blocks(desc:true, limit:2){
+        transactions{
+          signature
+        }
+        timestamp
+      }
+    }
+  }
+}
+"""
+
 app = FastAPI()
 
 
@@ -104,6 +120,8 @@ def make_get_staged_txids_request(host: str) -> grequests.AsyncRequest:
 def make_get_subscribe_addresses_request(host: str) -> grequests.AsyncRequest:
     return make_query_request(host, _SUBSCRIBER_ADDRESSES_GRAPHQL_QUERY)
 
+def make_get_block_interval_request(host: str) -> grequests.AsyncRequest:
+    return make_query_request(host, _BLOCK_INTERVAL_GRAPHQL_QUERY)
 
 def exception_handler(request, exception):
     print(exception)
@@ -120,6 +138,7 @@ def aggregate_metrics():
             *map(make_get_rpc_clients_count_request, _NODE_LIST),
             *map(make_get_staged_txids_request, filter(lambda x: x not in BANNED_HOSTS, _NODE_LIST)),
             *map(make_get_subscribe_addresses_request, filter(lambda x: x not in BANNED_HOSTS, _NODE_LIST)),
+            *map(make_get_block_interval_request, [_MINER_HOST]),
         ), exception_handler=exception_handler
     )
 
@@ -152,6 +171,18 @@ def aggregate_metrics():
                 rpc_clients_count = data["rpcInformation"]["totalCount"]
                 if rpc_clients_count is not None:
                     metric = f'ninechronicles_rpc_clients_count{{host="{host}",name="{name}"}} {rpc_clients_count}'
+            elif "chainQuery" in data:
+                tip_timestamp = data["chainQuery"]["blockQuery"]["blocks"][0]["timestamp"]
+                previous_timestamp = data["chainQuery"]["blockQuery"]["blocks"][1]["timestamp"]
+                time = parse(tip_timestamp) - parse(previous_timestamp)
+                interval = time.total_seconds()
+                transactions = data["chainQuery"]["blockQuery"]["blocks"][0]["transactions"]
+                tx_count = len(transactions)
+                print(tx_count)
+                metric = f'ninechronicles_tx_count{{host="{host}",name="{name}"}} {tx_count}'
+                metric += "\n"
+                print(interval)
+                metric += f'ninechronicles_block_interval{{host="{host}",name="{name}"}} {interval}'
 
             if metric is not None:
                 metrics += metric
