@@ -7,7 +7,13 @@ import grequests
 from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
 
-_MINER_HOST = "9c-miner.planetarium.dev"
+_MINER_HOST = [
+    "9c-miner.planetarium.dev",
+    "9c-main-validator-1.nine-chronicles.com",
+    "9c-main-validator-2.nine-chronicles.com",
+    "9c-main-validator-3.nine-chronicles.com",
+    "9c-main-validator-4.nine-chronicles.com"
+]
 
 _NODE_LIST = [
     "9c-main-rpc-1.nine-chronicles.com",
@@ -144,7 +150,7 @@ def aggregate_metrics():
             *map(make_get_rpc_clients_count_request, _NODE_LIST),
             *map(make_get_staged_txids_request, filter(lambda x: x not in BANNED_HOSTS, _NODE_LIST)),
             *map(make_get_subscribe_addresses_request, filter(lambda x: x not in BANNED_HOSTS, _NODE_LIST)),
-            *map(make_get_block_interval_request, [_MINER_HOST]),
+            *map(make_get_block_interval_request, _MINER_HOST),
         ), exception_handler=exception_handler
     )
 
