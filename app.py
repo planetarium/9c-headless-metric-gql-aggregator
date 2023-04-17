@@ -21,16 +21,12 @@ _NODE_LIST = [
     "9c-main-rpc-3.nine-chronicles.com",
     "9c-main-rpc-4.nine-chronicles.com",
     "9c-main-rpc-5.nine-chronicles.com",
-    "9c-main-rpc-31.nine-chronicles.com",
-    "9c-main-rpc-99.nine-chronicles.com",
     "tky-nc-1.ninodes.com",
     "sgp-nc-1.ninodes.com",
     "nj-nc-1.ninodes.com",
     "la-nc-1.ninodes.com",
     "fra-nc-1.ninodes.com",
     "9c-main-full-state.planetarium.dev",
-    "9c-main-miner-2.nine-chronicles.com",
-    "9c-main-miner-3.nine-chronicles.com",
     "api.9c.gg",
     "9c-main-data-provider-db.nine-chronicles.com",
     "d131807iozwu1d.cloudfront.net",
@@ -39,10 +35,7 @@ _NODE_LIST = [
     "9c-main-validator-1.nine-chronicles.com",
     "9c-main-validator-2.nine-chronicles.com",
     "9c-main-validator-3.nine-chronicles.com",
-    "9c-main-validator-4.nine-chronicles.com",
-    "9c-internal-rpc-1.nine-chronicles.com",
-    "a778316ca16af4065a02dc2753c1a0fc-1775306312.us-east-2.elb.amazonaws.com",
-    "ae177a0efd48c42c68ef1908fcdb0954-1722243693.us-east-2.elb.amazonaws.com:31235"
+    "9c-main-validator-4.nine-chronicles.com"
 ]
 
 _GET_TIP_GRAPHQL_QUERY = """
