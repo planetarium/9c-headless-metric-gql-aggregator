@@ -139,7 +139,7 @@ def aggregate_metrics():
 
     responses = grequests.map(
         (
-            *map(make_get_tip_request, (_MINER_HOST, *_NODE_LIST)),
+            *map(make_get_tip_request, (*_MINER_HOST, *_NODE_LIST)),
             *map(make_get_rpc_clients_count_request, _NODE_LIST),
             *map(make_get_staged_txids_request, filter(lambda x: x not in BANNED_HOSTS, _NODE_LIST)),
             *map(make_get_subscribe_addresses_request, filter(lambda x: x not in BANNED_HOSTS, _NODE_LIST)),
@@ -192,7 +192,8 @@ def aggregate_metrics():
             if metric is not None:
                 metrics += metric
                 metrics += "\n"
-        except:
+        except Exception as e:
+            print(e)
             pass
 
     return PlainTextResponse(metrics)
