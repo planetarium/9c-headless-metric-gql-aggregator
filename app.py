@@ -98,13 +98,13 @@ def make_query_request(host: str, query: str) -> grequests.AsyncRequest:
                 f"http://{host}/graphql_headless",
                 json={"query": query},
                 headers={"Content-Type": "application/json"},
-                timeout=10,
+                timeout=15,
             )
         return grequests.post(
             f"http://{host}/graphql",
             json={"query": query},
             headers={"Content-Type": "application/json"},
-            timeout=10,
+            timeout=15,
         )
     except:
         pass
